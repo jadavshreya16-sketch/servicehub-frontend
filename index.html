@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ServiceHub</title>
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      margin: 50px auto;
+      width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px gray;
+    }
+
+    select, button {
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #e3e3e3;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>ServiceHub 🔧</h1>
+
+  <h3>Select Service:</h3>
+
+  <select id="serviceSelect">
+    <option value="">--Choose--</option>
+    <option value="electrician">Electrician</option>
+    <option value="plumber">Plumber</option>
+  </select>
+
+  <button onclick="getProviders()">Search</button>
+
+  <h3>Results:</h3>
+  <ul id="results"></ul>
+</div>
+
+<script>
+  async function getProviders() {
+    const service = document.getElementById("serviceSelect").value;
+
+    if (!service) {
+      alert("Please select a service");
+      return;
+    }
+
+    const response = await fetch(`https://servicehub-backend-rzw2.onrender.com/providers/${service}`);
+    const data = await response.json();
+
+    const results = document.getElementById("results");
+    results.innerHTML = "";
+
+    data.forEach(p => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <strong>${p.name}</strong><br>
+        Location: ${p.location}<br>
+        Price: ₹${p.price}<br>
+        Contact: ${p.contact}
+      `;
+      results.appendChild(li);
+    });
+  }
+</script>
+
+</body>
+</html>
